@@ -1,5 +1,6 @@
 #include <MsTimer2.h>
 
+constexpr int pwm_frequency = 2'000;
 constexpr int resolution = 12;
 constexpr double scale = ((int)1 << resolution) - 1;
 
@@ -46,6 +47,15 @@ void setup() {
 
   Serial.println("8ch PWM generator");
 
+  analogWriteFrequency(PWM0, pwm_frequency);
+  analogWriteFrequency(PWM2, pwm_frequency);
+  analogWriteFrequency(PWM4, pwm_frequency);
+
+#ifdef ARDUINO_FRDM_MCXA156
+  analogWriteFrequency(D5, pwm_frequency);
+  analogWriteFrequency(D6, pwm_frequency);
+#endif
+
   analogWriteResolution(resolution);
 
   MsTimer2::set(10, timer_callback);  // every 500 ms
@@ -64,8 +74,11 @@ wave_setting waves[] = {
   { pi4, phase0, offset_middle, wave_amplitude, PWM3 },
   { pi4, phase1, offset_middle, wave_amplitude, PWM4 },
   { pi4, phase2, offset_middle, wave_amplitude, PWM5 },
+
+#ifdef ARDUINO_FRDM_MCXA156
   { pi2, phase0, offset_lower, wave_amplitude, D5 },
   { pi4, phase0, offset_lower, wave_amplitude, D6 },
+#endif
 };
 
 double value;
