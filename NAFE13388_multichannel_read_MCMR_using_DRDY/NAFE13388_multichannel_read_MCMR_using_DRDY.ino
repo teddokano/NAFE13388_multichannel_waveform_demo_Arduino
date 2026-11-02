@@ -27,7 +27,11 @@
 
 #include <NAFE13388_UIM.h>
 
+#ifdef ARDUINO_ARCH_MCX
+NAFE13388_UIM afe(0, false, 3, 4, 6, 7, 4, 14);
+#else
 NAFE13388_UIM afe;
+#endif
 
 void setup() {
   Serial.begin(115200);
